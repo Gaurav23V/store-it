@@ -33,12 +33,23 @@ const nextConfig: NextConfig = {
 
   // configure domain for github codespaces
   images: {
-    domains: ["*.app.github.dev"],
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**.app.github.dev",
+        hostname: "cdn.pixabay.com",
       },
+      {
+        protocol: "https",
+        hostname: "img.freepik.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cloud.appwrite.io",
+      },
+      {
+        protocol: "https",
+        hostname: "png.pngtree.com"
+      }
     ],
   },
 };
