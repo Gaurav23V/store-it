@@ -166,7 +166,7 @@ export const getFileIcon = (
       switch (type) {
         case 'image':
           return '/assets/icons/file-image.svg';
-        case 'document':
+        case 'documents':
           return '/assets/icons/file-document.svg';
         case 'video':
           return '/assets/icons/file-video.svg';
@@ -228,7 +228,7 @@ export const getUsageSummary = (totalSpace: any) => {
 export const getFileTypesParams = (type: string) => {
   switch (type) {
     case 'documents':
-      return ['document'];
+      return ['documents'];
     case 'images':
       return ['image'];
     case 'media':
@@ -236,6 +236,6 @@ export const getFileTypesParams = (type: string) => {
     case 'others':
       return ['other'];
     default:
-      return ['document'];
+      return ['documents'];
   }
 };
