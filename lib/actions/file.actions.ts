@@ -2,6 +2,8 @@
 
 import {
   DeleteFileProps,
+  FileType,
+  GetFilesProps,
   RenameFileProps,
   UpdateFileUsersProps,
   UploadFileProps,
@@ -65,7 +67,13 @@ export const uploadFile = async ({
   }
 };
 
-const createQueries = (currentUser: Models.Document) => {
+const createQueries = (
+  currentUser: Models.Document,
+  types: string[],
+  searchText: string,
+  sort: string,
+  limit?: number
+) => {
   const queries = [
     Query.or([
       Query.equal("owner", [currentUser.$id]),
@@ -73,11 +81,24 @@ const createQueries = (currentUser: Models.Document) => {
     ]),
   ];
 
-  // TODO: Search, sort limits...
+  if (types.length > 0) queries.push(Query.equal("type", types));
+  if (searchText) queries.push(Query.contains("name", searchText));
+  if (limit) queries.push(Query.limit(limit));
+
+  const [sortBy, orderBy] = sort.split("-");
+
+  queries.push(
+    orderBy === "asc" ? Query.orderAsc(sortBy) : Query.orderDesc(sortBy)
+  );
   return queries;
 };
 
-export const getFiles = async () => {
+export const getFiles = async ({
+  types = [],
+  searchText = "",
+  sort = "$createdAt-desc",
+  limit,
+}: GetFilesProps) => {
   const { databases } = await createAdminClient();
 
   try {
@@ -85,7 +106,7 @@ export const getFiles = async () => {
 
     if (!currentUser) throw new Error("User not found");
 
-    const queries = createQueries(currentUser);
+    const queries = createQueries(currentUser, types, searchText, sort, limit);
 
     console.log({ currentUser, queries });
 
@@ -175,5 +196,47 @@ export const deleteFile = async ({
     return parseStringify({ status: "success" });
   } catch (error) {
     handleError(error, "Failed to rename file");
+  }
+};
+
+export const getTotalSpaceUsed = async () => {
+  try {
+    const { databases } = await createAdminClient();
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) throw new Error("User is not authenticated.");
+
+    // Fetch all files owned by the user
+    const files = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      [Query.equal("owner", [currentUser.$id])]
+    );
+
+    const totalSpace = {
+      image: { size: 0, latestDate: "" },
+      documents: { size: 0, latestDate: "" },
+      video: { size: 0, latestDate: "" },
+      audio: { size: 0, latestDate: "" },
+      other: { size: 0, latestDate: "" },
+      used: 0,
+      all: 2 * 1024 * 1024 * 1024, // 2GB available bucket storage
+    };
+
+    files.documents.forEach((file) => {
+      const fileType = file.type as FileType;
+      totalSpace[fileType].size += file.size;
+      totalSpace.used += file.size;
+      if (
+        !totalSpace[fileType].latestDate ||
+        new Date(file.$updatedAt) > new Date(totalSpace[fileType].latestDate)
+      ) {
+        totalSpace[fileType].latestDate = file.$updatedAt;
+      }
+    });
+
+    return parseStringify(totalSpace);
+  } catch (error) {
+    handleError(error, "Failed to calculate total space used");
   }
 };
