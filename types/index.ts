@@ -5,7 +5,7 @@ import React from "react";
 
 type SegmentParams = { [key: string]: string };
 
-export type FileType = "document" | "image" | "video" | "audio" | "other";
+export type FileType = "documents" | "image" | "video" | "audio" | "other";
 
 export interface ActionType {
   label: string;

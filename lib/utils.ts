@@ -1,3 +1,4 @@
+import { FileType } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -193,8 +194,8 @@ export const getUsageSummary = (totalSpace: any) => {
   return [
     {
       title: 'Documents',
-      size: totalSpace.document.size,
-      latestDate: totalSpace.document.latestDate,
+      size: totalSpace.documents.size,
+      latestDate: totalSpace.documents.latestDate,
       icon: '/assets/icons/file-document-light.svg',
       url: '/documents',
     },
