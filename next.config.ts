@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       allowedOrigins: ["*"],
+      bodySizeLimit: '50mb', 
     },
   },
   // disable strict mode for now
