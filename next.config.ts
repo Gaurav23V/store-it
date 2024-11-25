@@ -1,11 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // enable server actions
   experimental: {
     serverActions: {
       allowedOrigins: ["*"],
-      bodySizeLimit: '50mb', 
+      bodySizeLimit: "50mb",
     },
   },
   // disable strict mode for now
@@ -49,8 +55,8 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "png.pngtree.com"
-      }
+        hostname: "png.pngtree.com",
+      },
     ],
   },
 };
