@@ -2,7 +2,7 @@
 
 A modern storage management platform built with Next.js 15 and Appwrite, designed to help users organize and share their digital assets efficiently.
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-blue)](https://store-it-ten-khaki.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-blue)](https://store-it.gaurav23v.live/)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![Appwrite](https://img.shields.io/badge/Appwrite-Latest-orange)](https://appwrite.io/)
 
